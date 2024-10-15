@@ -1,0 +1,89 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Govee heater
+
+# Input Helpers for Govee Heater Configuration
+input_text:
+  govee_sku:
+    name: Govee SKU
+    initial: "H713A"
+
+  govee_device_id:
+    name: Govee Device ID
+    initial: "29:2B:60:74:F4:0A:DE:6C"
+rest_command:
+  control_smart_heater:
+    url: "https://openapi.api.govee.com/router/api/v1/device/control"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Govee-API-Key: !secret govee_api_key  # Use your secret API key
+    payload: >
+      {
+        "requestId": "uuid",
+        "payload": {
+          "sku": "{{ sku }}",
+          "device": "{{ device }}",
+          "capability": {
+            "type": "{{ capability_type }}",
+            "instance": "{{ capability_instance }}",
+            "value": {{ value }},
+            "modeValue":0
+          }
+        }
+      }
+
+  govee_working_mode:
+    url: https://openapi.api.govee.com/router/api/v1/device/control
+    method: POST
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    content_type: "application/json; charset=utf-8"
+    payload: >-
+      {
+        "requestId": "1",
+        "payload": {
+          "sku": "H713A",
+          "device": "29:2B:60:74:F4:0A:DE:6C",
+          "capability": {
+          "type": "devices.capabilities.work_mode",
+            "instance": "workMode",
+            "value": {
+              "workMode": {{value}},
+              "modeValue": {{modevalue}}
+            }
+          }
+        }
+      }
+  # New command to get Govee devices
+  get_govee_devices:
+    url: "https://openapi.api.govee.com/router/api/v1/user/devices"
+    method: GET
+    headers:
+      Content-Type: "application/json"
+      Govee-API-Key: !secret govee_api_key  # Use your secret API key
+
+  govee_device_state:
+    url: "https://openapi.api.govee.com/router/api/v1/device/state"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Govee-API-Key: !secret govee_api_key  # Use your secret API key
+    payload: >
+      {
+        "requestId": "uuid",
+        "payload": {
+          "sku": "{{ sku }}",
+          "device": "{{ device }}",
+        }
+      }

@@ -1,0 +1,73 @@
+turn_on_heater:
+  alias: "Turn On Smart Heater"
+  sequence:
+    - service: rest_command.control_smart_heater
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        capability_type: "devices.capabilities.on_off"  # Capability type for ON/OFF
+        capability_instance: "powerSwitch"  # Capability instance for ON/OFF
+        value: 1  # 1 for ON
+
+turn_off_heater:
+  alias: "Turn Off Smart Heater"
+  sequence:
+    - service: rest_command.control_smart_heater
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        capability_type: "devices.capabilities.on_off"  # Capability type for ON/OFF
+        capability_instance: "powerSwitch"  # Capability instance for ON/OFF
+        value: 0  # 0 for OFF
+
+oscillation_off_heater:
+  alias: "Oscillation Off Smart Heater"
+  sequence:
+    - service: rest_command.control_smart_heater
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        capability_type: "devices.capabilities.toggle"  # Capability type for ON/OFF
+        capability_instance: "oscillationToggle"  # Capability instance for ON/OFF
+        value: 0  # 0 for OFF
+
+oscillation_on_heater:
+  alias: "Oscillation On Smart Heater"
+  sequence:
+    - service: rest_command.control_smart_heater
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        capability_type: "devices.capabilities.toggle"  # Capability type for ON/OFF
+        capability_instance: "oscillationToggle"  # Capability instance for ON/OFF
+        value: 1  # 1 for ON
+
+set_work_mode_low:
+  alias: "Set Smart Heater Work Mode to Low"
+  sequence:
+    - service: rest_command.govee_working_mode
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        value: 1  # 1 for Low, 2 for Medium, 3 for High
+        modevalue: 0
+        
+set_work_mode_medium:
+  alias: "Set Smart Heater Work Mode to Medium"
+  sequence:
+    - service: rest_command.govee_working_mode
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        value: 2 # 1 for Low, 2 for Medium, 3 for High
+        modevalue: 0
+
+set_work_mode_high:
+  alias: "Set Smart Heater Work Mode to Medium"
+  sequence:
+    - service: rest_command.govee_working_mode
+      data:
+        sku: "{{ states('input_text.govee_sku') }}"  # SKU from input helper
+        device: "{{ states('input_text.govee_device_id') }}"  # Device ID from input helper
+        value: 3  # 1 for Low, 2 for Medium, 3 for High
+        modevalue: 0
